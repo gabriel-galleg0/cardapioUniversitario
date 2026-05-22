@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cardápio Digital - Amaral Cantina</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fonte -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <!-- CSS próprio -->
+    <link rel="stylesheet" href="{% static 'css/cardapio.css' %}">
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
+    <div class="container">
+
+        <a class="navbar-brand d-flex align-items-center fw-semibold" href="#">
+            <img src="{% static 'images/amaral-logo.jpeg' %}" class="me-2">
+            Amaral Cantina
+        </a>
+
+        <div class="ms-auto d-flex gap-2">
+            <a href="{% url 'detalhe_carrinho' %}" class="btn btn-outline-light">
+                🛒 Carrinho
+            </a>
+
+            <a href="/admin/" class="btn btn-outline-light">
+                Admin
+            </a>
+        </div>
+
+    </div>
+</nav>
+
+<!-- CATEGORIAS -->
+<div class="container my-4 text-center">
+
+    <h5 class="mb-3 text-secondary">Filtrar por categoria</h5>
+
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+
+        {% for categoria in categorias %}
+        <a href="#cat-{{ categoria.id }}" class="btn btn-outline-light btn-category">
+            {{ categoria.nome }}
+        </a>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- CARDÁPIO -->
+<div class="container my-5">
+
+    {% for categoria in categorias %}
+
+    <h2 id="cat-{{ categoria.id }}">{{ categoria.nome }}</h2>
+
+    <div class="row g-4">
+
+        {% for item in categoria.itens.all %}
+
+        <div class="col-12 col-sm-6 col-lg-4">
+
+            <div class="card h-100">
+
+                {% if item.imagem %}
+                <img src="{{ item.imagem.url }}" class="card-img-top" alt="{{ item.nome }}">
+                {% endif %}
+
+                <div class="card-body">
+
+                    <h5 class="card-title fw-semibold">
+                        {{ item.nome }}
+                    </h5>
+
+                    <p class="card-text">
+                        {{ item.descricao }}
+                    </p>
+
+                </div>
+
+                <div class="card-footer d-flex justify-content-between align-items-center">
+
+                    <span class="price">
+                        R$ {{ item.preco }}
+                    </span>
+
+                    {% if item.disponivel %}
+                    <a href="{% url 'adicionar_ao_carrinho' item.id %}" class="btn btn-outline-light btn-add">
+                        🛒 Adicionar
+                    </a>
+                    {% else %}
+                    <span class="badge bg-secondary">
+                        Indisponível
+                    </span>
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+    {% endfor %}
+
+</div>
+
+<!-- FOOTER -->
+<footer class="text-white text-center py-4">
+    © {{ now|date:"Y" }} Amaral Cantina — Feito com cuidado 🍝
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

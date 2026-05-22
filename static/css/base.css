@@ -1,0 +1,91 @@
+:root {
+    --primary: #B69552;
+    --dark: #121212;
+    --text-light: #eaeaea;
+}
+
+/* BASE */
+body {
+    background: var(--dark);
+    color: var(--text-light);
+    font-family: 'Inter', sans-serif;
+}
+
+/* NAVBAR (não quebra Bootstrap) */
+.navbar {
+    background-color: #B69552 !important;
+    backdrop-filter: blur(10px);
+}
+
+.navbar-brand img {
+    height: 55px;
+    border-radius: 6px;
+}
+
+/* EVITA CONFLITO COM BOOTSTRAP CONTAINER */
+.container {
+    max-width: 1140px;
+}
+
+/* TÍTULOS */
+h2 {
+    font-weight: 600;
+    border-left: 4px solid var(--primary);
+    padding-left: 12px;
+    margin-bottom: 30px;
+}
+
+/* CARDS */
+.card {
+    background: #1e1e1e;
+    border: none;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+/* IMAGEM */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* TEXTO */
+.card-text {
+    color: #bfbfbf;
+    font-size: 0.95rem;
+}
+
+/* BOTÃO PRIMARY (não quebra Bootstrap globalmente) */
+.btn-primary {
+    background-color: var(--primary);
+    border: none;
+    border-radius: 10px;
+    padding: 8px 16px;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: #a8843f;
+}
+
+/* FOOTER */
+footer {
+    background: #0d0d0d;
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+/* SCROLL SUAVE */
+html {
+    scroll-behavior: smooth;
+}
