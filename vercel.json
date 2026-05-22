@@ -9,7 +9,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "cardapio/wsgi.py"
+      "dest": "manage.py"
     }
   ]
 }
