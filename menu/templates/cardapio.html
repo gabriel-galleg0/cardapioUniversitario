@@ -73,9 +73,24 @@
             <div class="card h-100">
 
                 {% if item.imagem %}
-                <img src="{{ item.imagem.url }}" class="card-img-top" alt="{{ item.nome }}">
-                {% endif %}
-
+    <img src="{{ item.imagem.url }}" class="card-img-top" alt="{{ item.nome }}">
+    {% else %}
+            {% with nome_lower=item.nome|lower %}
+        {% if nome_lower == "coxinha" %}
+            <img src="{% static 'images/coxinha-de-frango-com-catupiry.webp' %}" class="card-img-top" alt="{{ item.nome }}">
+        {% elif nome_lower == "x-calabresa" %}
+            <img src="{% static 'images/x-calabresa.jpg' %}" class="card-img-top" alt="{{ item.nome }}">
+        {% elif nome_lower == "esfiha de calabresa" %}
+            <img src="{% static 'images/EsfihaCalabresa.png' %}" class="card-img-top" alt="{{ item.nome }}">
+        {% elif nome_lower == "pepsi black" %}
+            <img src="{% static 'images/pepsi_black_lata.webp' %}" class="card-img-top" alt="{{ item.nome }}">
+        {% elif nome_lower == "coca cola" %}
+            <img src="{% static 'images/coca_lata.webp' %}" class="card-img-top" alt="{{ item.nome }}">
+        {% elif nome_lower == "chá de pessego" or nome_lower == "cha de pessego" %}
+            <img src="{% static 'images/ChaPessego.png' %}" class="card-img-top" alt="{{ item.nome }}">
+            {% endif %}
+                {% endwith %}
+        {% endif %}
                 <div class="card-body">
 
                     <h5 class="card-title fw-semibold">
