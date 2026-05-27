@@ -37,7 +37,7 @@
 
                 <!-- REMOVER -->
                 <div class="ms-3">
-                    <a href="{% url 'remover_do_carrinho' item.item.id %}" 
+                    <a href="{% url 'remover_do_carrinho' item.item.id %}"
                        class="btn btn-outline-danger btn-sm rounded-3">
                         ✕
                     </a>
@@ -59,7 +59,7 @@
             Total: <span class="text-warning">R$ {{ carrinho.get_total }}</span>
         </h4>
 
-        <a href="#" class="btn btn-primary px-4 py-2 rounded-3">
+        <a href="{% url 'pagamento' %}" class="btn btn-primary px-4 py-2 rounded-3">
             Finalizar Pedido
         </a>
 
@@ -67,7 +67,7 @@
 
     {% else %}
 
-    <!-- EMPTY STATE MELHOR -->
+    <!-- EMPTY STATE -->
 
     <div class="text-center py-5">
 

@@ -1,0 +1,177 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pagamento - Amaral Cantina</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'css/pagamento.css' %}">
+</head>
+
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark shadow-sm sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center fw-semibold" href="/">
+        <img src="{% static 'images/amaral-logo.jpeg' %}" class="me-2">
+        Amaral Cantina
+      </a>
+      <div class="ms-auto d-flex gap-2">
+        <a href="{% url 'detalhe_carrinho' %}" class="btn btn-outline-light">
+          🛒 Carrinho
+        </a>
+        <a href="/admin/" class="btn btn-outline-light">
+          Admin
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO -->
+  <div class="container payment-container">
+    <div class="row g-4">
+
+      <!-- ESQUERDA: formulário de pagamento -->
+      <div class="col-lg-7">
+        <div class="payment-card">
+
+          <h2>Finalizar Pedido</h2>
+          <div class="subtitle">Confira seus dados e finalize seu pedido</div>
+
+          <!-- PAGAMENTO -->
+          <div class="mb-5">
+            <div class="section-title">Pagamento</div>
+            <div class="payment-option active">💳 Pagamento com Cartão</div>
+          </div>
+
+          <!-- CARTÃO -->
+          <div>
+            <div class="section-title">Dados do Cartão</div>
+
+            <div class="mb-3">
+              <label class="form-label">Número do cartão</label>
+              <input id="cardNumber" type="text" class="form-control" placeholder="0000 0000 0000 0000">
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Nome no cartão</label>
+              <input id="cardName" type="text" class="form-control" placeholder="Nome impresso no cartão">
+            </div>
+
+            <div class="row">
+              <div class="col-6 mb-3">
+                <label class="form-label">Validade</label>
+                <input id="cardDate" type="text" class="form-control" placeholder="MM/AA">
+              </div>
+              <div class="col-6 mb-3">
+                <label class="form-label">CVV</label>
+                <input id="cardCvv" type="text" class="form-control" placeholder="123">
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- DIREITA: resumo do pedido real -->
+      <div class="col-lg-5">
+        <div class="payment-card">
+
+          <h2>Seu Pedido</h2>
+
+          {% for item in carrinho %}
+          <div class="product-item">
+            {% if item.item.imagem %}
+              <img src="{{ item.item.imagem.url }}" alt="{{ item.item.nome }}">
+            {% else %}
+              <div class="product-img-placeholder">🍽️</div>
+            {% endif %}
+            <div>
+              <div class="product-title">{{ item.item.nome }}</div>
+              <div class="product-description">{{ item.quantidade }}x — R$ {{ item.preco }} cada</div>
+            </div>
+          </div>
+          {% endfor %}
+
+          <!-- TOTAL -->
+          <div class="summary-line">
+            <span>Itens</span>
+            <span>R$ {{ carrinho.get_total }}</span>
+          </div>
+          <div class="summary-total">
+            <span>Total</span>
+            <span>R$ {{ carrinho.get_total }}</span>
+          </div>
+
+          <!-- BOTÃO que submete o form via POST -->
+          <form method="POST" action="{% url 'confirmar_pedido' %}">
+            {% csrf_token %}
+            <button id="confirmButton" type="submit" class="btn btn-finish w-100 mt-4">
+              Confirmar Pedido
+            </button>
+          </form>
+
+          <div class="info-text">Após o pagamento, retire seu pedido no balcão 🍝</div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="text-center py-4 text-white mt-5">
+    © {% now "Y" %} Amaral Cantina — Feito com cuidado 🍝
+  </footer>
+
+  <script>
+    /* NÚMERO DO CARTÃO */
+    const cardNumber = document.getElementById('cardNumber');
+    cardNumber.addEventListener('input', () => {
+      cardNumber.value = cardNumber.value
+        .replace(/\D/g, '')
+        .replace(/(\d{4})(?=\d)/g, '$1 ')
+        .trim();
+    });
+
+    /* NOME */
+    const cardName = document.getElementById('cardName');
+    cardName.addEventListener('input', () => {
+      cardName.value = cardName.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+    });
+
+    /* VALIDADE */
+    const cardDate = document.getElementById('cardDate');
+    cardDate.addEventListener('input', () => {
+      let value = cardDate.value.replace(/\D/g, '');
+      if (value.length > 2) value = value.slice(0, 2) + '/' + value.slice(2, 4);
+      cardDate.value = value;
+    });
+
+    /* CVV */
+    const cardCvv = document.getElementById('cardCvv');
+    cardCvv.addEventListener('input', () => {
+      cardCvv.value = cardCvv.value.replace(/\D/g, '').slice(0, 3);
+    });
+
+    /* VALIDAÇÃO antes de submeter */
+    document.querySelector('form').addEventListener('submit', (e) => {
+      if (
+        cardNumber.value.trim() === '' ||
+        cardName.value.trim() === '' ||
+        cardDate.value.trim() === '' ||
+        cardCvv.value.trim() === ''
+      ) {
+        e.preventDefault();
+        alert('Preencha todos os campos do cartão');
+      }
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
