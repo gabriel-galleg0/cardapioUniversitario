@@ -1,85 +1,277 @@
+
 {% extends "base.html" %}
+{% load static %}
+
+{% block title %}Meu Carrinho - Amaral Cantina{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/carrinho.css' %}">
+{% endblock %}
+
 {% block content %}
 
-<div class="container my-5">
+<div class="cart-page">
 
-    <h2 class="mb-4">🛒 Seu Carrinho</h2>
+    <!-- CABEÇALHO -->
+    <header class="cart-page-header">
+
+        <a href="/" class="cart-back">
+            <span aria-hidden="true">←</span>
+            Voltar ao cardápio
+        </a>
+
+        <div class="cart-heading">
+            <span class="cart-eyebrow">
+                AMARAL CANTINA
+            </span>
+
+            <h1>
+                Seu carrinho 🛒
+            </h1>
+
+            <p>
+                Confira seus itens antes de finalizar o pedido.
+            </p>
+        </div>
+
+    </header>
+
 
     {% if carrinho.carrinho %}
 
-    <div class="card border-0 shadow-sm rounded-4">
+    <div class="cart-layout">
 
-        <div class="card-body">
+        <!-- LISTA DE PRODUTOS -->
+        <section class="cart-items" aria-labelledby="itemsTitle">
 
-            {% for item in carrinho %}
+            <div class="cart-section-heading">
 
-            <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+                <h2 id="itemsTitle" class="cart-section-title">
+                    Itens do pedido
+                </h2>
 
-                <!-- INFO DO ITEM -->
-                <div>
-                    <h6 class="mb-1 fw-semibold">
-                        {{ item.item.nome }}
-                    </h6>
-                    <small class="text-secondary">
-                        Quantidade: {{ item.quantidade }}
-                    </small>
-                </div>
-
-                <!-- PREÇO -->
-                <div class="text-end">
-                    <div class="fw-semibold text-warning">
-                        R$ {{ item.preco_total }}
-                    </div>
-                    <small class="text-secondary">
-                        R$ {{ item.preco }} cada
-                    </small>
-                </div>
-
-                <!-- REMOVER -->
-                <div class="ms-3">
-                    <a href="{% url 'remover_do_carrinho' item.item.id %}"
-                       class="btn btn-outline-danger btn-sm rounded-3">
-                        ✕
-                    </a>
-                </div>
+                <span class="cart-count">
+                    {{ carrinho.carrinho|length }}
+                    produto{{ carrinho.carrinho|length|pluralize }}
+                </span>
 
             </div>
 
-            {% endfor %}
+            <div class="cart-items-list">
+
+                {% for item in carrinho %}
+
+                <article class="cart-item">
+
+                    <!-- IMAGEM -->
+                    <div class="cart-item-image">
+
+                        {% if item.item.imagem %}
+
+                            <img
+                                src="{{ item.item.imagem.url }}"
+                                alt=""
+                                loading="lazy"
+                                width="92"
+                                height="92"
+                            >
+
+                        {% else %}
+
+                            <span
+                                class="cart-image-placeholder"
+                                aria-hidden="true"
+                            >
+                                🍽️
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- INFORMAÇÕES -->
+                    <div class="cart-item-content">
+
+                        <div class="cart-item-top">
+
+                            <h3 class="cart-item-name">
+                                {{ item.item.nome }}
+                            </h3>
+
+                            <!-- REMOVER -->
+                            <form
+                                method="POST"
+                                action="{% url 'remover_do_carrinho' item.item.id %}"
+                                class="remove-form"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="cart-remove-button"
+                                    aria-label="Remover {{ item.item.nome }} do carrinho"
+                                >
+                                    Remover
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                        <p class="cart-unit-price">
+                            R$ {{ item.preco|floatformat:2 }}
+                            por unidade
+                        </p>
+
+                        <div class="cart-item-bottom">
+
+                            <!-- QUANTIDADE -->
+                            <span class="cart-quantity">
+                                <span class="cart-quantity-label">
+                                    Qtd.
+                                </span>
+
+                                <strong>
+                                    {{ item.quantidade }}
+                                </strong>
+                            </span>
+
+                            <!-- SUBTOTAL -->
+                            <strong class="cart-item-total">
+                                R$ {{ item.preco_total|floatformat:2 }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- CONTINUAR COMPRANDO -->
+            <a href="/" class="cart-continue-link">
+                <span aria-hidden="true">＋</span>
+                Adicionar mais produtos
+            </a>
+
+        </section>
+
+
+        <!-- RESUMO -->
+        <section
+            class="order-summary"
+            aria-labelledby="summaryTitle"
+        >
+
+            <div class="order-summary-card">
+
+                <h2 id="summaryTitle" class="order-summary-title">
+                    Resumo do pedido
+                </h2>
+
+                <div class="summary-row">
+
+                    <span>Subtotal</span>
+
+                    <strong>
+                        R$ {{ carrinho.get_total|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+                <div class="summary-divider"></div>
+
+                <div class="summary-total-row">
+
+                    <span>Total</span>
+
+                    <strong>
+                        R$ {{ carrinho.get_total|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+                <p class="summary-note">
+                    Confira seus produtos antes de continuar.
+                    O pagamento será realizado no balcão.
+                </p>
+
+                <!-- BOTÃO DESKTOP -->
+                <a
+                    href="{% url 'pagamento' %}"
+                    class="cart-checkout-button"
+                >
+                    Finalizar pedido
+                    <span aria-hidden="true">→</span>
+                </a>
+
+                <a href="/" class="cart-secondary-link">
+                    Continuar comprando
+                </a>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <!-- FINALIZAÇÃO FIXA NO CELULAR -->
+    <aside
+        class="cart-mobile-checkout"
+        aria-label="Finalizar compra"
+    >
+
+        <div class="mobile-total">
+
+            <span>Total do pedido</span>
+
+            <strong>
+                R$ {{ carrinho.get_total|floatformat:2 }}
+            </strong>
 
         </div>
 
-    </div>
-
-    <!-- TOTAL + AÇÃO -->
-
-    <div class="d-flex justify-content-between align-items-center mt-4">
-
-        <h4 class="mb-0">
-            Total: <span class="text-warning">R$ {{ carrinho.get_total }}</span>
-        </h4>
-
-        <a href="{% url 'pagamento' %}" class="btn btn-primary px-4 py-2 rounded-3">
-            Finalizar Pedido
+        <a
+            href="{% url 'pagamento' %}"
+            class="mobile-checkout-button"
+        >
+            Finalizar
+            <span aria-hidden="true">→</span>
         </a>
 
-    </div>
+    </aside>
+
 
     {% else %}
 
-    <!-- EMPTY STATE -->
+    <!-- CARRINHO VAZIO -->
+    <section class="cart-empty">
 
-    <div class="text-center py-5">
+        <div class="empty-icon" aria-hidden="true">
+            🛒
+        </div>
 
-        <h5 class="text-secondary mb-3">
-            Seu carrinho está vazio 🥲
-        </h5>
+        <h2>
+            Seu carrinho está vazio
+        </h2>
 
-        <a href="/" class="btn btn-primary rounded-3">
-            Ver Cardápio
+        <p>
+            Ainda não tem nada por aqui!
+            Explore nosso cardápio e escolha algo delicioso.
+        </p>
+
+        <a href="/" class="empty-button">
+            Explorar cardápio
+            <span aria-hidden="true">→</span>
         </a>
 
-    </div>
+    </section>
 
     {% endif %}
 

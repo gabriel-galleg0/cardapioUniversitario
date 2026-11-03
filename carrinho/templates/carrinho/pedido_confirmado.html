@@ -1,64 +1,373 @@
+
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br" data-bs-theme="dark">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pedido Confirmado - Amaral Cantina</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{% static 'css/pedido_confirmado.css' %}">
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="robots"
+        content="noindex, nofollow"
+    >
+
+    <meta name="theme-color" content="#B69552">
+
+    <title>Pedido Registrado - Amaral Cantina</title>
+
+    <!-- FONTE -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+  <link
+    rel="stylesheet"
+    href="{% static 'css/pedido_confirmado.css' %}?v=2"
+>
 </head>
 
 <body>
 
-  <div class="container">
-    <div class="order-card">
+<!-- NAVBAR DOURADA -->
+<header class="confirmation-navbar no-print">
 
-      <!-- LOGO -->
-      <div class="logo-area">
-        <img src="{% static 'images/amaral-logo.jpeg' %}" alt="Logo">
-      </div>
+    <nav class="navbar-container" aria-label="Navegação principal">
 
-      <h1>Pedido Confirmado ✅</h1>
+        <a href="/" class="navbar-brand">
 
-      <p class="subtitle">Seu número para retirada é:</p>
+            <img
+                src="{% static 'images/amaral-logo.jpeg' %}"
+                alt=""
+                class="navbar-logo"
+                width="44"
+                height="44"
+            >
 
-      <div id="orderNumber" class="order-number">001</div>
+            <span class="brand-info">
+                <strong>Amaral Cantina</strong>
+                <small>Cardápio digital</small>
+            </span>
 
-      <!-- RESUMO REAL DO PEDIDO -->
-      <div class="summary">
-        <h5 class="mb-4">Resumo do Pedido</h5>
+        </a>
 
-        {% for item in pedido.itens %}
-        <div class="summary-item">
-          <span>{{ item.quantidade }}x {{ item.nome }}</span>
-          <span>R$ {{ item.preco_total }}</span>
+        <a href="/" class="navbar-action">
+            <span aria-hidden="true">←</span>
+            Cardápio
+        </a>
+
+    </nav>
+
+</header>
+
+
+<!-- CONTEÚDO -->
+<main class="confirmation-container">
+
+    <article class="confirmation-card">
+
+        <!-- STATUS -->
+        <div class="confirmation-status">
+
+            <div class="success-icon" aria-hidden="true">
+                ✓
+            </div>
+
+            <span class="status-label">
+                PEDIDO REGISTRADO
+            </span>
+
+            <h1>
+                Tudo certo! 🎉
+            </h1>
+
+            <p class="confirmation-subtitle">
+                Confira seu pedido e guarde o código
+                para apresentar na cantina.
+            </p>
+
         </div>
-        {% endfor %}
 
-        <div class="summary-total">
-          <span>Total</span>
-          <span>R$ {{ pedido.total }}</span>
+
+        <!-- CÓDIGO DE RETIRADA -->
+        <section
+            class="pickup-section"
+            aria-labelledby="pickupTitle"
+        >
+
+            <h2 id="pickupTitle">
+                Código de retirada
+            </h2>
+
+            <p>
+                Apresente este código no balcão.
+            </p>
+
+            {% if pedido.codigo %}
+
+                <div
+                    class="pickup-code"
+                    id="pickupCode"
+                >
+                    {{ pedido.codigo }}
+                </div>
+
+                <button
+                    type="button"
+                    id="copyButton"
+                    class="copy-button no-print"
+                >
+                    <span aria-hidden="true">📋</span>
+                    Copiar código
+                </button>
+
+                <p
+                    id="copyFeedback"
+                    class="copy-feedback no-print"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+
+            {% else %}
+
+                <p class="code-unavailable">
+                    Código não disponível.
+                </p>
+
+            {% endif %}
+
+            {% if pedido.criado_em %}
+
+                <p class="order-date">
+                    Realizado em {{ pedido.criado_em }}
+                </p>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- PAGAMENTO -->
+        <section
+            class="payment-status"
+            aria-labelledby="paymentTitle"
+        >
+
+            <div class="payment-status-icon" aria-hidden="true">
+                🏪
+            </div>
+
+            <div class="payment-status-content">
+
+                <h2 id="paymentTitle">
+                    Pagamento no balcão
+                </h2>
+
+                <p>
+                    Seu pedido ainda não foi pago.
+                    Realize o pagamento presencialmente
+                    no momento da retirada.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMO DO PEDIDO -->
+        <section
+            class="order-summary"
+            aria-labelledby="summaryTitle"
+        >
+
+            <div class="summary-header">
+
+                <h2 id="summaryTitle">
+                    Resumo do pedido
+                </h2>
+
+                <span aria-hidden="true">🛍️</span>
+
+            </div>
+
+            <div class="summary-items">
+
+                {% for item in pedido.itens %}
+
+                    <div class="summary-item">
+
+                        <div class="item-info">
+
+                            <div class="item-name">
+
+                                <span class="item-quantity">
+                                    {{ item.quantidade }}×
+                                </span>
+
+                                <strong>
+                                    {{ item.nome }}
+                                </strong>
+
+                            </div>
+
+                            {% if item.preco_unitario %}
+
+                                <small class="item-unit-price">
+                                    R$ {{ item.preco_unitario|floatformat:2 }}
+                                    por unidade
+                                </small>
+
+                            {% endif %}
+
+                        </div>
+
+                        <strong class="item-total">
+                            R$ {{ item.preco_total|floatformat:2 }}
+                        </strong>
+
+                    </div>
+
+                {% empty %}
+
+                    <p class="empty-items">
+                        Nenhum produto encontrado neste pedido.
+                    </p>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- TOTAL -->
+            <div class="summary-total">
+
+                <span>Total do pedido</span>
+
+                <strong>
+                    R$ {{ pedido.total|floatformat:2 }}
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- INFORMAÇÃO DE RETIRADA -->
+        <div class="pickup-reminder">
+
+            <span aria-hidden="true">💡</span>
+
+            <p>
+                Guarde seu código e apresente-o
+                à equipe da Amaral Cantina.
+            </p>
+
         </div>
-      </div>
 
-      <!-- BOTÃO VOLTAR -->
-      <a href="/" class="btn btn-finish mt-4">
-        Fazer novo pedido
-      </a>
 
-    </div>
-  </div>
+        <!-- BOTÕES -->
+        <div class="confirmation-actions no-print">
 
-  <script>
-    // Número de pedido incremental por sessão do navegador (sessionStorage reseta ao fechar)
-    let orderNumber = parseInt(sessionStorage.getItem('orderNumber') || '0') + 1;
-    sessionStorage.setItem('orderNumber', orderNumber);
-    document.getElementById('orderNumber').innerText = String(orderNumber).padStart(3, '0');
-  </script>
+            <a href="/" class="new-order-button">
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                Fazer novo pedido
+
+                <span aria-hidden="true">→</span>
+
+            </a>
+
+            <button
+                type="button"
+                id="printButton"
+                class="print-button"
+            >
+                <span aria-hidden="true">🖨️</span>
+                Imprimir comprovante
+            </button>
+
+        </div>
+
+    </article>
+
+</main>
+
+
+<!-- RODAPÉ -->
+<footer class="confirmation-footer no-print">
+
+    © {% now "Y" %} Amaral Cantina
+
+    <p>Feito com cuidado 🍝</p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const copyButton = document.getElementById("copyButton");
+    const pickupCode = document.getElementById("pickupCode");
+    const copyFeedback = document.getElementById("copyFeedback");
+    const printButton = document.getElementById("printButton");
+
+    let feedbackTimer;
+
+    // COPIAR CÓDIGO
+    if (copyButton && pickupCode) {
+
+        copyButton.addEventListener("click", async function () {
+
+            const code = pickupCode.textContent.trim();
+
+            try {
+
+                if (!navigator.clipboard?.writeText) {
+                    throw new Error("Clipboard indisponível");
+                }
+
+                await navigator.clipboard.writeText(code);
+
+                copyButton.textContent = "Código copiado ✓";
+                copyFeedback.textContent = "Código copiado com sucesso!";
+
+                clearTimeout(feedbackTimer);
+
+                feedbackTimer = setTimeout(function () {
+                    copyButton.textContent = "📋 Copiar código";
+                    copyFeedback.textContent = "";
+                }, 3000);
+
+            } catch (error) {
+
+                copyFeedback.textContent =
+                    "Não foi possível copiar automaticamente. " +
+                    "Selecione e copie o código acima.";
+
+            }
+
+        });
+
+    }
+
+    // IMPRIMIR COMPROVANTE
+    if (printButton) {
+
+        printButton.addEventListener("click", function () {
+            window.print();
+        });
+
+    }
+
+});
+</script>
+
 </body>
 </html>

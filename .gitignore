@@ -1,18 +1,25 @@
-# Ambiente virtual
+# Ambientes e variáveis
+.env
+.env.*
+!.env.example
+.venv/
 venv/
 env/
-.venv/
 
 # Python
 __pycache__/
-*.pyc
+*.py[cod]
 
 # Django
-
+db.sqlite3
+db.sqlite3-*
 media/
+staticfiles/
 
-# Variáveis
-.env
+# Testes
+.pytest_cache/
+.coverage
+htmlcov/
 
 # IDE
 .vscode/

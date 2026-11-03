@@ -15,6 +15,8 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    
+    {% block extra_css %}{% endblock %}
 </head>
 
 <body>
@@ -26,8 +28,8 @@
             <a class="navbar-brand d-flex align-items-center fw-semibold" href="/">
 
                 <img src="{% static 'images/amaral-logo.jpeg' %}" class="me-2" alt="Logo">
-
-                Amaral Cantina
+                
+                <h6>Amaral Cantina</h6>
             </a>
 
         </div>

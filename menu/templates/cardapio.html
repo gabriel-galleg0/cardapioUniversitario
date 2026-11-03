@@ -1,145 +1,616 @@
+
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="pt-br" data-bs-theme="dark">
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cardápio Digital - Amaral Cantina</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#101319">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Cardápio - Amaral Cantina</title>
 
     <!-- Fonte -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-    <!-- CSS próprio -->
-    <link rel="stylesheet" href="{% static 'css/cardapio.css' %}">
+  <link
+    rel="stylesheet"
+    href="{% static 'css/cardapio.css' %}?v=2"
+>
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm sticky-top">
-    <div class="container">
+<!-- CABEÇALHO -->
+<header class="site-header">
 
-        <a class="navbar-brand d-flex align-items-center fw-semibold" href="#">
-            <img src="{% static 'images/amaral-logo.jpeg' %}" class="me-2">
-            Amaral Cantina
+    <div class="container-custom header-inner">
+
+        <a href="/" class="brand">
+
+            <img
+                src="{% static 'images/amaral-logo.jpeg' %}"
+                alt=""
+                class="brand-logo"
+                width="42"
+                height="42"
+            >
+
+            <span class="brand-info">
+                <span class="brand-name">
+                    Amaral Cantina
+                </span>
+
+                <span class="brand-subtitle">
+                    Cardápio digital
+                </span>
+            </span>
+
         </a>
 
-        <div class="ms-auto d-flex gap-2">
-            <a href="{% url 'detalhe_carrinho' %}" class="btn btn-outline-light">
-                🛒 Carrinho
+        <div class="header-actions">
+
+            <a
+                href="{% url 'detalhe_carrinho' %}"
+                class="header-cart"
+                aria-label="Abrir carrinho"
+            >
+                <span aria-hidden="true">🛒</span>
+                <span class="cart-text">Carrinho</span>
             </a>
 
-            <a href="/admin/" class="btn btn-outline-light">
-                Admin
-            </a>
+            {% if user.is_staff %}
+                <a
+                    href="{% url 'admin:index' %}"
+                    class="admin-link"
+                >
+                    Admin
+                </a>
+            {% endif %}
+
         </div>
 
     </div>
-</nav>
 
-<!-- CATEGORIAS -->
-<div class="container my-4 text-center">
+</header>
 
-    <h5 class="mb-3 text-secondary">Filtrar por categoria</h5>
 
-    <div class="d-flex flex-wrap justify-content-center gap-2">
+<!-- BOAS-VINDAS -->
+<div class="container-custom">
 
-        {% for categoria in categorias %}
-        <a href="#cat-{{ categoria.id }}" class="btn btn-outline-light btn-category">
-            {{ categoria.nome }}
-        </a>
-        {% endfor %}
+    <section class="welcome">
+
+        <p class="welcome-label">
+            Bem-vindo à Amaral Cantina
+        </p>
+        
+        <p>
+            Escolha seus favoritos e monte seu pedido.
+        </p>
+
+    </section>
+
+
+    <!-- BUSCA -->
+    <div class="search-wrapper" role="search">
+
+        <label class="search-box" for="menuSearch">
+
+            <span class="search-icon" aria-hidden="true">
+                🔎
+            </span>
+
+            <input
+                type="search"
+                id="menuSearch"
+                placeholder="Buscar lanche, bebida..."
+                autocomplete="off"
+                aria-label="Buscar produtos no cardápio"
+            >
+
+            <button
+                type="button"
+                id="clearSearch"
+                class="clear-search"
+                aria-label="Limpar busca"
+                hidden
+            >
+                ✕
+            </button>
+
+        </label>
 
     </div>
+
 </div>
 
+
+<!-- CATEGORIAS HORIZONTAIS -->
+<nav class="category-nav" aria-label="Categorias">
+
+    <div class="container-custom">
+
+        <div class="category-scroll">
+
+            <a
+                href="#cardapio"
+                class="category-chip is-active"
+            >
+                Todos
+            </a>
+
+            {% for categoria in categorias %}
+
+                <a
+                    href="#cat-{{ categoria.id }}"
+                    class="category-chip"
+                >
+                    {{ categoria.nome }}
+                </a>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</nav>
+
+
 <!-- CARDÁPIO -->
-<div class="container my-5">
+<main class="container-custom menu-main" id="cardapio">
+
+    <!-- NENHUM RESULTADO -->
+    <div id="noResults" class="no-results" hidden>
+
+        <div class="no-results-icon" aria-hidden="true">
+            🔍
+        </div>
+
+        <h2>
+            Nenhum produto encontrado
+        </h2>
+
+        <p>
+            Experimente buscar por outro nome.
+        </p>
+
+    </div>
+
 
     {% for categoria in categorias %}
 
-    <h2 id="cat-{{ categoria.id }}">{{ categoria.nome }}</h2>
+    <section
+        class="menu-section"
+        id="cat-{{ categoria.id }}"
+    >
 
-    <div class="row g-4">
+        <div class="section-heading">
 
-        {% for item in categoria.itens.all %}
+            <h2>
+                {{ categoria.nome }}
+            </h2>
 
-        <div class="col-12 col-sm-6 col-lg-4">
+            <span class="section-line"></span>
 
-            <div class="card h-100">
+        </div>
 
-                {% if item.imagem %}
-    <img src="{{ item.imagem.url }}" class="card-img-top" alt="{{ item.nome }}">
-    {% else %}
-            {% with nome_lower=item.nome|lower %}
-        {% if nome_lower == "coxinha" %}
-            <img src="{% static 'images/coxinha-de-frango-com-catupiry.webp' %}" class="card-img-top" alt="{{ item.nome }}">
-        {% elif nome_lower == "x-calabresa" %}
-            <img src="{% static 'images/x-calabresa.jpg' %}" class="card-img-top" alt="{{ item.nome }}">
-        {% elif nome_lower == "esfiha de calabresa" %}
-            <img src="{% static 'images/EsfihaCalabresa.png' %}" class="card-img-top" alt="{{ item.nome }}">
-        {% elif nome_lower == "pepsi black" %}
-            <img src="{% static 'images/pepsi_black_lata.webp' %}" class="card-img-top" alt="{{ item.nome }}">
-        {% elif nome_lower == "coca cola" %}
-            <img src="{% static 'images/coca_lata.webp' %}" class="card-img-top" alt="{{ item.nome }}">
-        {% elif nome_lower == "chá de pessego" or nome_lower == "cha de pessego" %}
-            <img src="{% static 'images/ChaPessego.png' %}" class="card-img-top" alt="{{ item.nome }}">
-            {% endif %}
-            {% endwith %}
-        {% endif %}
-                <div class="card-body">
+        <div class="product-grid">
 
-                    <h5 class="card-title fw-semibold">
-                        {{ item.nome }}
-                    </h5>
+            {% for item in categoria.itens.all %}
 
-                    <p class="card-text">
-                        {{ item.descricao }}
-                    </p>
+            <article
+                class="product-card"
+                data-search="{{ item.nome }} {{ item.descricao }} {{ categoria.nome }}"
+            >
 
-                </div>
+                <!-- IMAGEM -->
+                <div class="product-image">
 
-                <div class="card-footer d-flex justify-content-between align-items-center">
+                    {% if item.imagem %}
 
-                    <span class="price">
-                        R$ {{ item.preco }}
-                    </span>
+                        <img
+                            src="{{ item.imagem.url }}"
+                            alt="{{ item.nome }}"
+                            loading="lazy"
+                            width="160"
+                            height="160"
+                        >
 
-                    {% if item.disponivel %}
-                    <a href="{% url 'adicionar_ao_carrinho' item.id %}" class="btn btn-outline-light btn-add">
-                        🛒 Adicionar
-                    </a>
                     {% else %}
-                    <span class="badge bg-secondary">
-                        Indisponível
-                    </span>
+
+                        {% with nome_lower=item.nome|lower %}
+
+                            {% if nome_lower == "coxinha" %}
+
+                                <img
+                                    src="{% static 'images/coxinha-de-frango-com-catupiry.webp' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% elif nome_lower == "x-calabresa" %}
+
+                                <img
+                                    src="{% static 'images/x-calabresa.jpg' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% elif nome_lower == "esfiha de calabresa" %}
+
+                                <img
+                                    src="{% static 'images/EsfihaCalabresa.png' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% elif nome_lower == "pepsi black" %}
+
+                                <img
+                                    src="{% static 'images/pepsi_black_lata.webp' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% elif nome_lower == "coca cola" %}
+
+                                <img
+                                    src="{% static 'images/coca_lata.webp' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% elif nome_lower == "chá de pessego" or nome_lower == "cha de pessego" %}
+
+                                <img
+                                    src="{% static 'images/ChaPessego.png' %}"
+                                    alt="{{ item.nome }}"
+                                    loading="lazy"
+                                >
+
+                            {% else %}
+
+                                <span
+                                    class="image-placeholder"
+                                    aria-hidden="true"
+                                >
+                                    🍽️
+                                </span>
+
+                            {% endif %}
+
+                        {% endwith %}
+
                     {% endif %}
 
                 </div>
 
-            </div>
+
+                <!-- DADOS -->
+                <div class="product-content">
+
+                    <h3 class="product-title">
+                        {{ item.nome }}
+                    </h3>
+
+                    {% if item.descricao %}
+                        <p class="product-description">
+                            {{ item.descricao }}
+                        </p>
+                    {% endif %}
+
+
+                    <!-- PREÇO + AÇÃO -->
+                    <div class="product-bottom">
+
+                        <span class="product-price">
+                            R$ {{ item.preco|floatformat:2 }}
+                        </span>
+
+                        {% if item.disponivel %}
+
+                            <form
+                                method="POST"
+                                action="{% url 'adicionar_ao_carrinho' item.id %}"
+                                class="add-form"
+                            >
+                                {% csrf_token %}
+
+                                <button
+                                    type="submit"
+                                    class="btn-add"
+                                    aria-label="Adicionar {{ item.nome }} ao carrinho"
+                                >
+                                    <span class="add-plus" aria-hidden="true">
+                                        +
+                                    </span>
+
+                                    <span class="add-label">
+                                        Adicionar
+                                    </span>
+
+                                </button>
+
+                            </form>
+
+                        {% else %}
+
+                            <span class="unavailable">
+                                Indisponível
+                            </span>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </article>
+
+            {% endfor %}
 
         </div>
 
-        {% endfor %}
+    </section>
 
-    </div>
+    {% empty %}
+
+        <div class="no-results">
+            <div class="no-results-icon">🍽️</div>
+            <h2>Cardápio em atualização</h2>
+            <p>Volte em breve para conferir os produtos.</p>
+        </div>
 
     {% endfor %}
 
-</div>
+</main>
 
-<!-- FOOTER -->
-<footer class="text-white text-center py-4">
-    © {{ now|date:"Y" }} Amaral Cantina — Feito com cuidado 🍝
+
+<!-- CARRINHO FIXO NO MOBILE -->
+<aside class="cart-dock" aria-label="Acessar carrinho">
+
+    <div class="cart-dock-info">
+
+        <div class="cart-dock-icon" aria-hidden="true">
+            🛒
+        </div>
+
+        <div>
+            <strong>Seu carrinho</strong>
+
+            <small id="dockCaption">
+                Confira seus itens
+            </small>
+        </div>
+
+    </div>
+
+    <a
+        href="{% url 'detalhe_carrinho' %}"
+        class="cart-dock-button"
+    >
+        Ver carrinho
+        <span aria-hidden="true">→</span>
+    </a>
+
+</aside>
+
+
+<!-- FEEDBACK -->
+<div
+    id="feedbackToast"
+    class="feedback-toast"
+    role="status"
+    aria-live="polite"
+    hidden
+></div>
+
+
+<!-- RODAPÉ -->
+<footer class="site-footer">
+
+    © {% now "Y" %} Amaral Cantina
+    <br>
+    Feito com cuidado 🍝
+
 </footer>
 
-<!-- Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JAVASCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    /*
+     * 1. BUSCA INSTANTÂNEA
+     */
+
+    const searchInput = document.getElementById("menuSearch");
+    const clearSearch = document.getElementById("clearSearch");
+    const products = document.querySelectorAll(".product-card");
+    const sections = document.querySelectorAll(".menu-section");
+    const noResults = document.getElementById("noResults");
+
+    function normalizeText(value) {
+        return value
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()
+            .trim();
+    }
+
+    function filterProducts() {
+        const query = normalizeText(searchInput.value);
+        let visibleCount = 0;
+
+        products.forEach(function (product) {
+            const productText = normalizeText(
+                product.dataset.search || ""
+            );
+
+            const matches = productText.includes(query);
+
+            product.hidden = !matches;
+
+            if (matches) {
+                visibleCount++;
+            }
+        });
+
+        sections.forEach(function (section) {
+            const visibleProducts = section.querySelectorAll(
+                ".product-card:not([hidden])"
+            );
+
+            section.hidden = visibleProducts.length === 0;
+        });
+
+        noResults.hidden = visibleCount > 0;
+        clearSearch.hidden = searchInput.value.length === 0;
+    }
+
+    searchInput.addEventListener("input", filterProducts);
+
+    clearSearch.addEventListener("click", function () {
+        searchInput.value = "";
+        filterProducts();
+        searchInput.focus();
+    });
+
+
+    /*
+     * 2. CATEGORIAS
+     */
+
+    const categoryChips =
+        document.querySelectorAll(".category-chip");
+
+    categoryChips.forEach(function (chip) {
+
+        chip.addEventListener("click", function () {
+
+            // Limpa a busca antes de navegar
+            if (searchInput.value) {
+                searchInput.value = "";
+                filterProducts();
+            }
+
+            categoryChips.forEach(function (item) {
+                item.classList.remove("is-active");
+            });
+
+            chip.classList.add("is-active");
+        });
+
+    });
+
+
+    /*
+     * 3. FEEDBACK VISUAL
+     */
+
+    const feedbackToast =
+        document.getElementById("feedbackToast");
+
+    const dockCaption =
+        document.getElementById("dockCaption");
+
+    let toastTimer;
+
+    function showToast(message, isError = false) {
+        clearTimeout(toastTimer);
+
+        feedbackToast.textContent = message;
+        feedbackToast.classList.toggle("error", isError);
+        feedbackToast.hidden = false;
+
+        toastTimer = setTimeout(function () {
+            feedbackToast.hidden = true;
+        }, 2800);
+    }
+
+
+    /*
+     * 4. ADICIONAR SEM RECARREGAR A PÁGINA
+     *
+     * Usa a mesma URL POST do Django.
+     * O formulário continua funcionando sem JavaScript.
+     */
+
+    const addForms =
+        document.querySelectorAll(".add-form");
+
+    addForms.forEach(function (form) {
+
+        form.addEventListener("submit", async function (event) {
+
+            if (!window.fetch || !window.FormData) {
+                return;
+            }
+
+            event.preventDefault();
+
+            const button = form.querySelector(".btn-add");
+            const label = form.querySelector(".add-label");
+
+            if (button.disabled) {
+                return;
+            }
+
+            button.disabled = true;
+            label.textContent = "Adicionando...";
+
+            try {
+
+                const response = await fetch(form.action, {
+                    method: "POST",
+                    body: new FormData(form),
+                    credentials: "same-origin",
+                    redirect: "follow",
+                    headers: {
+                        "X-Requested-With": "XMLHttpRequest"
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Falha ao adicionar produto");
+                }
+
+                label.textContent = "Adicionado ✓";
+
+                dockCaption.textContent = "Item adicionado ✓";
+
+                showToast("Produto adicionado ao carrinho!");
+
+                // Vibração leve, se o navegador suportar
+                if ("vibrate" in navigator) {
+                    navigator.vibrate(25);
+                }
+
+            } catch (error) {
+
+                label.textContent = "Adicionar";
+
+                showToast(
+                    "Não foi possível adicionar. Tente novamente.",
+                    true
+                );
+
+            } finally {
+
+                setTimeout(function () {
+                    button.disabled = false;
+                    label.textContent = "Adicionar";
+                }, 1200);
+
+            }
+
+        });
+
+    });
+
+});
+</script>
 
 </body>
 </html>

@@ -1,110 +1,659 @@
+
+/* ========================================
+   AMARAL CANTINA - PEDIDO CONFIRMADO
+   MOBILE FIRST
+======================================== */
+
 :root {
-    --primary: #B69552;
-    --dark: #121212;
+    --bg: #101319;
+    --surface: #1b2029;
+    --surface-light: #252b35;
+    --border: #343b46;
+    --text: #f8f9fb;
+    --muted: #aeb5c0;
+    --accent: #ffbd69;
+    --navbar: #B69552;
+    --navbar-text: #17191e;
+    --success: #38b779;
+}
+
+/* RESET */
+
+* {
+    box-sizing: border-box;
 }
 
 body {
-    background: var(--dark);
-    color: #eaeaea;
-    font-family: 'Inter', sans-serif;
-    min-height: 100vh;
     margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "Inter", sans-serif;
+    -webkit-font-smoothing: antialiased;
 }
 
-.container {
-    min-height: 100vh;
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+button {
+    font: inherit;
+    cursor: pointer;
+}
+
+a,
+button {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+a:focus-visible,
+button:focus-visible {
+    outline: 3px solid var(--accent);
+    outline-offset: 3px;
+}
+
+/* ========================================
+   NAVBAR DOURADA
+======================================== */
+
+.confirmation-navbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    width: 100%;
+    background-color: #B69552;
+    box-shadow: 0 3px 14px rgba(0, 0, 0, 0.18);
+}
+
+.navbar-container {
     display: flex;
     align-items: center;
-    justify-content: center;
-    max-width: 1100px;
+    justify-content: space-between;
+    gap: 12px;
+    width: min(100% - 32px, 1120px);
+    min-height: 70px;
+    margin: 0 auto;
 }
 
-.order-card {
-    background: #1e1e1e;
-    border-radius: 24px;
-    padding: 60px;
-    text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-    width: 100%;
-    max-width: 900px;
-    margin: auto;
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    color: var(--navbar-text);
 }
 
-.logo-area {
-    margin-bottom: 25px;
-}
-
-.logo-area img {
-    width: 120px;
-    height: 120px;
+.navbar-logo {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 12px;
 }
 
-h1 {
+.brand-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.brand-info strong {
+    font-size: 0.94rem;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+.brand-info small {
+    color: rgba(23, 25, 30, 0.8);
+    font-size: 0.7rem;
+}
+
+.navbar-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 44px;
+    flex-shrink: 0;
+    padding: 10px 12px;
+    color: var(--navbar-text);
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(23, 25, 30, 0.2);
+    border-radius: 12px;
+    font-size: 0.82rem;
     font-weight: 700;
-    margin-bottom: 15px;
 }
 
-.subtitle {
-    color: #bfbfbf;
-    margin-bottom: 20px;
+.navbar-action:hover {
+    background: rgba(255, 255, 255, 0.25);
 }
 
-.order-number {
-    font-size: 5rem;
+/* ========================================
+   CONTAINER
+======================================== */
+
+.confirmation-container {
+    width: min(100% - 28px, 680px);
+    margin: 0 auto;
+    padding: 28px 0 48px;
+}
+
+.confirmation-card {
+    padding: 24px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* ========================================
+   STATUS DE SUCESSO
+======================================== */
+
+.confirmation-status {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.success-icon {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 19px;
+    color: #ffffff;
+    background: rgba(56, 183, 121, 0.15);
+    border: 2px solid var(--success);
+    border-radius: 50%;
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+.status-label {
+    color: var(--success);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 1.3px;
+}
+
+.confirmation-status h1 {
+    margin: 10px 0 0;
+    font-size: clamp(1.7rem, 6vw, 2.3rem);
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+}
+
+.confirmation-subtitle {
+    max-width: 400px;
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 0.88rem;
+    line-height: 1.7;
+}
+
+/* ========================================
+   CÓDIGO DE RETIRADA
+======================================== */
+
+.pickup-section {
+    margin-top: 28px;
+    padding: 23px 16px;
+    text-align: center;
+    background: var(--surface-light);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+}
+
+.pickup-section h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 800;
+}
+
+.pickup-section > p {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.5;
+}
+
+.pickup-code {
+    width: fit-content;
+    max-width: 100%;
+    margin: 20px auto 15px;
+    padding: 14px 24px;
+    color: #17191e;
+    background: var(--accent);
+    border-radius: 13px;
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+    font-weight: 800;
+    letter-spacing: 3px;
+    overflow-wrap: anywhere;
+    user-select: all;
+    -webkit-user-select: all;
+}
+
+.copy-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 20px;
+    color: var(--text);
+    background: #343b46;
+    border: 1px solid #505866;
+    border-radius: 11px;
+    font-size: 0.84rem;
     font-weight: 700;
-    color: var(--primary);
-    margin-bottom: 30px;
 }
 
-.summary {
-    background: #181818;
-    border-radius: 16px;
-    padding: 25px;
-    text-align: left;
+.copy-button:hover {
+    background: #454d59;
+}
+
+.copy-feedback {
+    min-height: 20px;
+    margin-top: 9px !important;
+    color: var(--success) !important;
+    font-size: 0.78rem;
+}
+
+.pickup-section .order-date {
+    margin-top: 12px;
+    font-size: 0.76rem;
+}
+
+.code-unavailable {
+    padding: 18px 0;
+    color: var(--muted);
+}
+
+/* ========================================
+   AVISO DE PAGAMENTO
+======================================== */
+
+.payment-status {
+    display: flex;
+    align-items: flex-start;
+    gap: 13px;
     margin-top: 20px;
+    padding: 18px;
+    background: rgba(182, 149, 82, 0.08);
+    border: 1px solid rgba(182, 149, 82, 0.4);
+    border-radius: 15px;
 }
 
-.summary-item,
+.payment-status-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    background: rgba(182, 149, 82, 0.13);
+    border-radius: 12px;
+    font-size: 1.4rem;
+}
+
+.payment-status-content {
+    min-width: 0;
+}
+
+.payment-status-content h2 {
+    margin: 3px 0 7px;
+    font-size: 0.92rem;
+    font-weight: 800;
+}
+
+.payment-status-content p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.65;
+}
+
+/* ========================================
+   RESUMO DO PEDIDO
+======================================== */
+
+.order-summary {
+    margin-top: 24px;
+}
+
+.summary-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.summary-header h2 {
+    margin: 0;
+    font-size: 1.08rem;
+    font-weight: 800;
+}
+
+.summary-header span {
+    font-size: 1.5rem;
+}
+
+.summary-items {
+    border-top: 1px solid var(--border);
+}
+
+.summary-item {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 17px 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.item-info {
+    min-width: 0;
+}
+
+.item-name {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+.item-name strong {
+    font-size: 0.88rem;
+    font-weight: 700;
+    overflow-wrap: anywhere;
+}
+
+.item-quantity {
+    flex-shrink: 0;
+    color: var(--accent);
+    font-size: 0.83rem;
+    font-weight: 800;
+}
+
+.item-unit-price {
+    display: block;
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 0.76rem;
+}
+
+.item-total {
+    flex-shrink: 0;
+    padding-top: 2px;
+    font-size: 0.87rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.empty-items {
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+
+/* TOTAL */
+
 .summary-total {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 15px;
+    gap: 12px;
+    padding-top: 22px;
 }
 
-.summary-total {
-    border-top: 1px solid #333;
-    padding-top: 15px;
+.summary-total span {
+    font-size: 1rem;
     font-weight: 700;
-    color: var(--primary);
 }
 
-.btn-finish {
-    background: var(--primary) !important;
-    border: none !important;
-    color: #fff !important;
-    padding: 12px 30px;
+.summary-total strong {
+    color: var(--accent);
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+/* ========================================
+   LEMBRETE
+======================================== */
+
+.pickup-reminder {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-top: 26px;
+    padding: 15px;
+    background: var(--surface-light);
     border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: 0.25s;
-    display: inline-block;
 }
 
-.btn-finish:hover {
-    background: #c5a25f !important;
+.pickup-reminder span {
+    flex-shrink: 0;
+    font-size: 1.15rem;
 }
 
-@media(max-width:768px){
-    .order-card {
-        padding: 40px 25px;
+.pickup-reminder p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.6;
+}
+
+/* ========================================
+   BOTÕES
+======================================== */
+
+.confirmation-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.new-order-button,
+.print-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 52px;
+    padding: 13px 20px;
+    border-radius: 13px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    text-align: center;
+}
+
+.new-order-button {
+    color: #17191e;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+}
+
+.new-order-button:hover {
+    color: #17191e;
+    background: #ffd091;
+}
+
+.print-button {
+    color: var(--text);
+    background: transparent;
+    border: 1px solid #545c69;
+}
+
+.print-button:hover {
+    background: var(--surface-light);
+}
+
+/* ========================================
+   RODAPÉ
+======================================== */
+
+.confirmation-footer {
+    padding: 25px 20px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    text-align: center;
+}
+
+.confirmation-footer p {
+    margin: 7px 0 0;
+}
+
+/* ========================================
+   TELAS MUITO PEQUENAS
+======================================== */
+
+@media (max-width: 360px) {
+    .confirmation-card {
+        padding: 20px 14px;
     }
-    .order-number {
-        font-size: 4rem;
+
+    .navbar-logo {
+        width: 38px;
+        height: 38px;
     }
-    .logo-area img {
-        width: 90px;
-        height: 90px;
+
+    .brand-info strong {
+        font-size: 0.82rem;
+    }
+
+    .brand-info small {
+        font-size: 0.65rem;
+    }
+
+    .pickup-code {
+        padding: 12px 15px;
+        letter-spacing: 1.5px;
+    }
+
+    .summary-item {
+        gap: 8px;
+    }
+
+    .item-total {
+        font-size: 0.8rem;
+    }
+}
+
+/* ========================================
+   TABLET E DESKTOP
+======================================== */
+
+@media (min-width: 768px) {
+    .confirmation-container {
+        padding-top: 48px;
+        padding-bottom: 60px;
+    }
+
+    .confirmation-card {
+        padding: 38px 42px;
+        border-radius: 24px;
+    }
+
+    .pickup-section {
+        padding: 30px;
+    }
+
+    .confirmation-actions {
+        flex-direction: row;
+    }
+
+    .confirmation-actions > * {
+        flex: 1;
+    }
+}
+
+/* ========================================
+   IMPRESSÃO
+======================================== */
+
+@media print {
+    @page {
+        margin: 15mm;
+    }
+
+    body {
+        background: #ffffff !important;
+        color: #000000 !important;
+    }
+
+    .no-print {
+        display: none !important;
+    }
+
+    .confirmation-container {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+    }
+
+    .confirmation-card {
+        padding: 10px;
+        color: #000000;
+        background: #ffffff !important;
+        border: 1px solid #cccccc;
+        box-shadow: none;
+    }
+
+    .pickup-section,
+    .payment-status,
+    .pickup-reminder {
+        background: #ffffff !important;
+        border: 1px solid #bbbbbb;
+    }
+
+    .pickup-code {
+        color: #000000;
+        background: #eeeeee !important;
+        border: 2px solid #000000;
+    }
+
+    .confirmation-status h1,
+    .pickup-section h2,
+    .payment-status h2,
+    .summary-header h2,
+    .item-name strong,
+    .item-total,
+    .summary-total,
+    .summary-total strong {
+        color: #000000 !important;
+    }
+
+    .confirmation-subtitle,
+    .pickup-section p,
+    .payment-status p,
+    .item-unit-price,
+    .pickup-reminder p {
+        color: #444444 !important;
+    }
+
+    .summary-item,
+    .summary-items {
+        border-color: #cccccc;
+    }
+}
+
+/* ========================================
+   ACESSIBILIDADE
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
     }
 }
