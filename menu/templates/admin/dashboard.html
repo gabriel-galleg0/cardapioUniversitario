@@ -1,0 +1,496 @@
+{% extends "admin/index.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+
+    <link
+        rel="stylesheet"
+        href="{% static 'css/admin_dashboard.css' %}?v=2"
+    >
+{% endblock %}
+
+{# Remove o espaço reservado para a coluna lateral do Admin #}
+{% block coltype %}colM{% endblock %}
+
+{# Remove o título repetido acima do dashboard #}
+{% block content_title %}{% endblock %}
+
+{# Remove a área lateral de ações recentes #}
+{% block sidebar %}{% endblock %}
+
+{% block content %}
+
+{% url "admin:menu_itemcardapio_add" as produto_add_url %}
+{% url "admin:menu_itemcardapio_changelist" as produtos_url %}
+{% url "admin:menu_categoria_add" as categoria_add_url %}
+{% url "admin:menu_categoria_changelist" as categorias_url %}
+
+<div class="amaral-dashboard">
+
+    <!-- APRESENTAÇÃO -->
+    <section class="dashboard-hero">
+
+        <div class="dashboard-hero-copy">
+
+            <span class="dashboard-kicker">
+                Painel administrativo
+            </span>
+
+            <h1>
+                Visão geral do cardápio
+            </h1>
+
+            <p>
+                Acompanhe produtos, disponibilidade, preços e categorias
+                da Amaral Cantina em um só lugar.
+            </p>
+
+        </div>
+
+        <div class="dashboard-hero-actions">
+
+            <a
+                href="{{ produto_add_url }}"
+                class="dashboard-button dashboard-button-primary"
+            >
+                <span aria-hidden="true">＋</span>
+                Novo produto
+            </a>
+
+            <a
+                href="{{ produtos_url }}"
+                class="dashboard-button dashboard-button-secondary"
+            >
+                Gerenciar produtos
+            </a>
+
+            <a
+                href="/"
+                target="_blank"
+                rel="noopener"
+                class="dashboard-button dashboard-button-secondary"
+            >
+                Abrir cardápio
+                <span aria-hidden="true">↗</span>
+            </a>
+
+        </div>
+
+    </section>
+
+    <!-- INDICADORES -->
+    <section
+        class="dashboard-metrics"
+        aria-label="Indicadores do cardápio"
+    >
+
+        <article class="metric-card">
+
+            <div class="metric-card-header">
+
+                <span class="metric-icon metric-icon-gold" aria-hidden="true">
+                    #
+                </span>
+
+                <span class="metric-label">
+                    Produtos
+                </span>
+
+            </div>
+
+            <strong class="metric-value">
+                {{ total_produtos }}
+            </strong>
+
+            <span class="metric-detail">
+                Total cadastrado
+            </span>
+
+        </article>
+
+        <article class="metric-card">
+
+            <div class="metric-card-header">
+
+                <span class="metric-icon metric-icon-green" aria-hidden="true">
+                    ✓
+                </span>
+
+                <span class="metric-label">
+                    Disponíveis
+                </span>
+
+            </div>
+
+            <strong class="metric-value">
+                {{ produtos_disponiveis }}
+            </strong>
+
+            <span class="metric-detail">
+                Visíveis no cardápio
+            </span>
+
+        </article>
+
+        <article class="metric-card">
+
+            <div class="metric-card-header">
+
+                <span class="metric-icon metric-icon-orange" aria-hidden="true">
+                    !
+                </span>
+
+                <span class="metric-label">
+                    Indisponíveis
+                </span>
+
+            </div>
+
+            <strong class="metric-value">
+                {{ produtos_indisponiveis }}
+            </strong>
+
+            <span class="metric-detail">
+                Fora de venda
+            </span>
+
+        </article>
+
+        <article class="metric-card">
+
+            <div class="metric-card-header">
+
+                <span class="metric-icon metric-icon-blue" aria-hidden="true">
+                    ≡
+                </span>
+
+                <span class="metric-label">
+                    Categorias
+                </span>
+
+            </div>
+
+            <strong class="metric-value">
+                {{ total_categorias }}
+            </strong>
+
+            <span class="metric-detail">
+                {{ categorias_sem_produtos }}
+                sem produto{{ categorias_sem_produtos|pluralize }}
+            </span>
+
+        </article>
+
+        <article class="metric-card">
+
+            <div class="metric-card-header">
+
+                <span class="metric-icon metric-icon-purple" aria-hidden="true">
+                    R$
+                </span>
+
+                <span class="metric-label">
+                    Preço médio
+                </span>
+
+            </div>
+
+            <strong class="metric-value metric-value-price">
+                R$ {{ preco_medio|floatformat:2 }}
+            </strong>
+
+            <span class="metric-detail">
+                Média do cardápio
+            </span>
+
+        </article>
+
+    </section>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <div class="dashboard-main-grid">
+
+        <!-- DISPONIBILIDADE -->
+        <section
+            class="dashboard-panel availability-panel"
+            aria-labelledby="availabilityTitle"
+        >
+
+            <header class="panel-header">
+
+                <div>
+
+                    <span class="panel-kicker">
+                        Status
+                    </span>
+
+                    <h2 id="availabilityTitle">
+                        Disponibilidade geral
+                    </h2>
+
+                    <p>
+                        Produtos atualmente ativos no cardápio
+                    </p>
+
+                </div>
+
+            </header>
+
+            <div class="availability-content">
+
+                <div
+                    class="availability-ring"
+                    style="--percentage: {{ percentual_disponivel }};"
+                    role="img"
+                    aria-label="{{ percentual_disponivel }}% dos produtos disponíveis"
+                >
+
+                    <div class="availability-ring-inner">
+
+                        <strong>
+                            {{ percentual_disponivel }}
+                        </strong>
+
+                        <span>%</span>
+
+                    </div>
+
+                </div>
+
+                <div class="availability-summary">
+
+                    <div class="availability-summary-item">
+
+                        <span class="availability-dot availability-dot-green">
+                        </span>
+
+                        <div>
+
+                            <span>Disponíveis</span>
+
+                            <strong>
+                                {{ produtos_disponiveis }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                    <div class="availability-summary-item">
+
+                        <span class="availability-dot availability-dot-orange">
+                        </span>
+
+                        <div>
+
+                            <span>Indisponíveis</span>
+
+                            <strong>
+                                {{ produtos_indisponiveis }}
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% if produtos_indisponiveis %}
+
+                <a
+                    href="{{ produtos_url }}?disponivel__exact=0"
+                    class="panel-action-link"
+                >
+                    Ver produtos indisponíveis
+                    <span aria-hidden="true">→</span>
+                </a>
+
+            {% else %}
+
+                <p class="availability-success">
+                    Todos os produtos cadastrados estão disponíveis.
+                </p>
+
+            {% endif %}
+
+        </section>
+
+        <!-- CATEGORIAS -->
+        <section
+            class="dashboard-panel categories-panel"
+            aria-labelledby="categoriesTitle"
+        >
+
+            <header class="panel-header panel-header-actions">
+
+                <div>
+
+                    <span class="panel-kicker">
+                        Organização
+                    </span>
+
+                    <h2 id="categoriesTitle">
+                        Produtos por categoria
+                    </h2>
+
+                    <p>
+                        Distribuição e disponibilidade do cardápio
+                    </p>
+
+                </div>
+
+                <div class="panel-actions">
+
+                    <a
+                        href="{{ categoria_add_url }}"
+                        class="panel-button"
+                    >
+                        ＋ Nova
+                    </a>
+
+                    <a
+                        href="{{ categorias_url }}"
+                        class="panel-button"
+                    >
+                        Gerenciar
+                    </a>
+
+                </div>
+
+            </header>
+
+            {% if categorias_dashboard %}
+
+                <div class="dashboard-table-wrapper">
+
+                    <table class="dashboard-table">
+
+                        <thead>
+
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Produtos</th>
+                                <th>Disponíveis</th>
+                                <th>Disponibilidade</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody>
+
+                            {% for categoria in categorias_dashboard %}
+
+                                <tr>
+
+                                    <td
+                                        class="category-name"
+                                        data-label="Categoria"
+                                    >
+                                        {{ categoria.nome }}
+                                    </td>
+
+                                    <td data-label="Produtos">
+                                        {{ categoria.total_itens }}
+                                    </td>
+
+                                    <td data-label="Disponíveis">
+                                        {{ categoria.itens_disponiveis }}
+                                    </td>
+
+                                    <td data-label="Disponibilidade">
+
+                                        <div class="category-progress">
+
+                                            <progress
+                                                value="{{ categoria.percentual_disponivel }}"
+                                                max="100"
+                                                aria-label="{{ categoria.percentual_disponivel }}% disponível"
+                                            >
+                                                {{ categoria.percentual_disponivel }}%
+                                            </progress>
+
+                                            <strong>
+                                                {{ categoria.percentual_disponivel }}%
+                                            </strong>
+
+                                        </div>
+
+                                    </td>
+
+                                </tr>
+
+                            {% endfor %}
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            {% else %}
+
+                <div class="dashboard-empty-state">
+
+                    <span aria-hidden="true">
+                        📂
+                    </span>
+
+                    <h3>
+                        Nenhuma categoria cadastrada
+                    </h3>
+
+                    <p>
+                        Crie uma categoria para começar a organizar
+                        os produtos do cardápio.
+                    </p>
+
+                    <a
+                        href="{{ categoria_add_url }}"
+                        class="dashboard-button dashboard-button-primary"
+                    >
+                        Criar categoria
+                    </a>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+    <!-- ADMINISTRAÇÃO PADRÃO -->
+    <section class="admin-models-section">
+
+        <header class="admin-models-heading">
+
+            <div>
+
+                <span class="panel-kicker">
+                    Configurações
+                </span>
+
+                <h2>
+                    Administração
+                </h2>
+
+                <p>
+                    Gerencie os registros disponíveis no sistema.
+                </p>
+
+            </div>
+
+        </header>
+
+        <div class="admin-models-wrapper">
+            {{ block.super }}
+        </div>
+
+    </section>
+
+</div>
+
+{% endblock %}

@@ -70,12 +70,14 @@ SECURE_SSL_REDIRECT = not DEBUG
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    "cardapio.apps.AmaralAdminConfig",
+
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'menu',
     'carrinho',
 ]
