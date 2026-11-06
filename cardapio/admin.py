@@ -25,9 +25,8 @@ class AmaralAdminSite(admin.AdminSite):
 
         total_categorias = Categoria.objects.count()
 
-        preco_medio = ItemCardapio.objects.aggregate(
+        preco_medio = ItemCardapio.objects.filter(disponivel=True).aggregate(
             media=Avg("preco")
-
         )["media"] or Decimal(0.00)
 
         if total_produtos:
