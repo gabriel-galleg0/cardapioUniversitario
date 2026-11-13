@@ -1,0 +1,536 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br" data-bs-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta name="theme-color" content="#B69552">
+
+    <title>Finalizar Pedido - Amaral Cantina</title>
+
+    <!-- FONTE -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- CSS -->
+ <link
+    rel="stylesheet"
+    href="{% static 'css/pagamento.css' %}?v=3"
+>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<header class="checkout-navbar">
+
+    <nav class="nav-container" aria-label="Navegação principal">
+
+        <a href="/" class="navbar-brand">
+
+            <img
+                src="{% static 'images/amaral-logo.jpeg' %}"
+                alt=""
+                class="navbar-logo"
+                width="44"
+                height="44"
+            >
+
+            <span class="brand-info">
+                <strong>Amaral Cantina</strong>
+                <small>Cardápio digital</small>
+            </span>
+
+        </a>
+
+        <div class="nav-actions">
+
+            <a
+                href="{% url 'detalhe_carrinho' %}"
+                class="nav-cart"
+                aria-label="Voltar ao carrinho"
+            >
+                <span aria-hidden="true">🛒</span>
+                <span class="nav-cart-label">Carrinho</span>
+            </a>
+
+            {% if request.user.is_staff %}
+
+                <a
+                    href="{% url 'admin:index' %}"
+                    class="nav-admin"
+                >
+                    Admin
+                </a>
+
+            {% endif %}
+
+        </div>
+
+    </nav>
+
+</header>
+
+
+<!-- CONTEÚDO -->
+<main class="checkout-container">
+
+    <!-- VOLTAR -->
+    <a
+        href="{% url 'detalhe_carrinho' %}"
+        class="back-link"
+    >
+        <span aria-hidden="true">←</span>
+        Voltar ao carrinho
+    </a>
+
+
+    <!-- CABEÇALHO -->
+    <div class="checkout-intro">
+
+        <span class="eyebrow">
+            ÚLTIMA ETAPA
+        </span>
+
+        <h1>
+            Quase pronto! 🎉
+        </h1>
+
+        <p>
+            Confira os detalhes do seu pedido
+            antes de confirmar.
+        </p>
+
+    </div>
+
+
+    <!-- LAYOUT PRINCIPAL -->
+    <div class="checkout-layout">
+
+        <!-- PAGAMENTO E RETIRADA -->
+        <section
+            class="checkout-card payment-details"
+            aria-labelledby="paymentTitle"
+        >
+
+            <div class="section-header">
+
+                <div class="section-icon" aria-hidden="true">
+                    🏪
+                </div>
+
+                <div>
+                    <h2 id="paymentTitle">
+                        Pagamento e retirada
+                    </h2>
+
+                    <p>
+                        Veja como funciona
+                    </p>
+                </div>
+
+            </div>
+
+
+            <!-- FORMA DE PAGAMENTO -->
+            <div class="payment-method">
+
+                <div class="payment-method-icon" aria-hidden="true">
+                    💳
+                </div>
+
+                <div class="payment-method-info">
+
+                    <strong>
+                        Pagamento no balcão
+                    </strong>
+
+                    <small>
+                        Pague presencialmente na retirada
+                    </small>
+
+                </div>
+
+                <span class="payment-check" aria-hidden="true">
+                    ✓
+                </span>
+
+            </div>
+
+
+            <!-- INSTRUÇÕES -->
+            <h3 class="instructions-title">
+                Como funciona?
+            </h3>
+
+            <ol class="checkout-steps">
+
+                <li class="checkout-step">
+
+                    <span class="step-number">
+                        1
+                    </span>
+
+                    <div class="step-content">
+
+                        <strong>
+                            Confirme seu pedido
+                        </strong>
+
+                        <p>
+                            Confira os produtos e toque
+                            em confirmar.
+                        </p>
+
+                    </div>
+
+                </li>
+
+                <li class="checkout-step">
+
+                    <span class="step-number">
+                        2
+                    </span>
+
+                    <div class="step-content">
+
+                        <strong>
+                            Guarde seu código
+                        </strong>
+
+                        <p>
+                            Após confirmar, você receberá
+                            um código de retirada.
+                        </p>
+
+                    </div>
+
+                </li>
+
+                <li class="checkout-step">
+
+                    <span class="step-number">
+                        3
+                    </span>
+
+                    <div class="step-content">
+
+                        <strong>
+                            Pague no balcão
+                        </strong>
+
+                        <p>
+                            Apresente seu código e realize
+                            o pagamento na cantina.
+                        </p>
+
+                    </div>
+
+                </li>
+
+            </ol>
+
+
+            <!-- AVISO -->
+            <div class="payment-notice">
+
+                <span class="notice-icon" aria-hidden="true">
+                    🔒
+                </span>
+
+                <p>
+                    <strong>Pagamento presencial</strong>
+                    Nenhum dado de cartão é solicitado
+                    ou processado neste site.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- RESUMO DO PEDIDO -->
+        <section
+            class="checkout-card order-review"
+            aria-labelledby="orderTitle"
+        >
+
+            <div class="order-header">
+
+                <div>
+                    <span class="order-eyebrow">
+                        CONFIRA SEU PEDIDO
+                    </span>
+
+                    <h2 id="orderTitle">
+                        Resumo do pedido
+                    </h2>
+                </div>
+
+                <span class="order-header-icon" aria-hidden="true">
+                    🛍️
+                </span>
+
+            </div>
+
+
+            <!-- ITENS -->
+            <div class="order-items">
+
+                {% for item in carrinho %}
+
+                    <article class="order-item">
+
+                        <!-- IMAGEM -->
+                        <div class="order-item-image">
+
+                            {% if item.item.imagem %}
+
+                                <img
+                                    src="{{ item.item.imagem.url }}"
+                                    alt=""
+                                    loading="lazy"
+                                    width="68"
+                                    height="68"
+                                >
+
+                            {% else %}
+
+                                <span
+                                    class="image-placeholder"
+                                    aria-hidden="true"
+                                >
+                                    🍽️
+                                </span>
+
+                            {% endif %}
+
+                        </div>
+
+
+                        <!-- INFORMAÇÕES -->
+                        <div class="order-item-info">
+
+                            <h3>
+                                {{ item.item.nome }}
+                            </h3>
+
+                            <p>
+                                {{ item.quantidade }} ×
+                                R$ {{ item.preco|floatformat:2 }}
+                            </p>
+
+                        </div>
+
+
+                        <!-- SUBTOTAL -->
+                        <strong class="order-item-total">
+                            R$ {{ item.preco_total|floatformat:2 }}
+                        </strong>
+
+                    </article>
+
+                {% empty %}
+
+                    <div class="empty-order">
+
+                        <span aria-hidden="true">🛒</span>
+
+                        <p>
+                            Seu carrinho está vazio.
+                        </p>
+
+                        <a href="/">
+                            Ver cardápio
+                        </a>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- TOTAIS -->
+            <div class="order-totals">
+
+                <div class="subtotal-row">
+
+                    <span>Subtotal</span>
+
+                    <strong>
+                        R$ {{ carrinho.get_total|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+                <div class="total-divider"></div>
+
+                <div class="total-row">
+
+                    <span>Total</span>
+
+                    <strong>
+                        R$ {{ carrinho.get_total|floatformat:2 }}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- FORMULÁRIO DE CONFIRMAÇÃO -->
+            <form
+                id="confirmOrderForm"
+                method="POST"
+                action="{% url 'confirmar_pedido' %}"
+            >
+                {% csrf_token %}
+
+                {% if carrinho.carrinho %}
+
+                    <button
+                        type="submit"
+                        class="confirm-button desktop-confirm"
+                    >
+                        Confirmar pedido
+                        <span aria-hidden="true">→</span>
+                    </button>
+
+                {% else %}
+
+                    <a href="/" class="confirm-button">
+                        Voltar ao cardápio
+                    </a>
+
+                {% endif %}
+
+            </form>
+
+
+            <p class="order-disclaimer">
+                Ao confirmar, você seguirá para a tela
+                com os dados do pedido.
+                O pagamento será feito no balcão.
+            </p>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<!-- BOTÃO FIXO MOBILE -->
+{% if carrinho.carrinho %}
+
+<div class="mobile-checkout-bar">
+
+    <div class="mobile-checkout-info">
+
+        <small>Total do pedido</small>
+
+        <strong>
+            R$ {{ carrinho.get_total|floatformat:2 }}
+        </strong>
+
+    </div>
+
+    <button
+        type="submit"
+        form="confirmOrderForm"
+        class="mobile-confirm-button"
+    >
+        Confirmar
+        <span aria-hidden="true">→</span>
+    </button>
+
+</div>
+
+{% endif %}
+
+
+<!-- RODAPÉ -->
+<footer class="checkout-footer">
+
+    © {% now "Y" %} Amaral Cantina
+
+    <p>
+        Feito com cuidado 🍝
+    </p>
+
+</footer>
+
+
+<!-- JAVASCRIPT -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const form = document.getElementById("confirmOrderForm");
+
+    const confirmButtons = document.querySelectorAll(
+        '.desktop-confirm, .mobile-confirm-button'
+    );
+
+    let submitting = false;
+
+    if (!form) {
+        return;
+    }
+
+    form.addEventListener("submit", function (event) {
+
+        if (submitting) {
+            event.preventDefault();
+            return;
+        }
+
+        submitting = true;
+
+        confirmButtons.forEach(function (button) {
+            button.textContent = "Registrando...";
+            button.setAttribute("aria-disabled", "true");
+        });
+
+        // Desabilita após iniciar o envio do formulário.
+        setTimeout(function () {
+            confirmButtons.forEach(function (button) {
+                button.disabled = true;
+            });
+        }, 0);
+
+    });
+
+    // Restaura botões ao voltar pelo histórico do navegador.
+    window.addEventListener("pageshow", function () {
+        submitting = false;
+
+        confirmButtons.forEach(function (button) {
+            button.disabled = false;
+            button.removeAttribute("aria-disabled");
+
+            if (button.classList.contains("mobile-confirm-button")) {
+                button.innerHTML =
+                    'Confirmar <span aria-hidden="true">→</span>';
+            } else {
+                button.innerHTML =
+                    'Confirmar pedido <span aria-hidden="true">→</span>';
+            }
+        });
+    });
+
+});
+</script>
+
+</body>
+</html>

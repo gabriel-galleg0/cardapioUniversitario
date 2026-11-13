@@ -1,0 +1,19 @@
+{% extends "admin/login.html" %}
+{% load static %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="../../static/css/admin_custom.css">
+{% endblock %}
+
+{% block footer %}
+    {{ block.super }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const errorNote = document.querySelector(".errornote");
+            if (errorNote) {
+                errorNote.textContent = "Usuário ou senha incorretos. Verifique seus dados e tente novamente.";
+            }
+        });
+    </script>
+{% endblock %}
