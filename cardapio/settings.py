@@ -70,6 +70,8 @@ SECURE_SSL_REDIRECT = not DEBUG
 # Application definition
 
 INSTALLED_APPS = [
+    'menu',
+    'carrinho',
     "cardapio.apps.AmaralAdminConfig",
 
     'django.contrib.auth',
@@ -77,9 +79,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'menu',
-    'carrinho',
 ]
 
 MIDDLEWARE = [
