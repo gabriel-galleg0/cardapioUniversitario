@@ -1,0 +1,406 @@
+/* =========================================================
+   TEMA PERSONALIZADO DO PAINEL - AMARAL CANTINA
+   ========================================================= */
+
+:root, [data-theme="light"], [data-theme="dark"] {
+    --primary: #d4a663 !important;
+    --primary-fg: #14161a !important;
+    --secondary: #1e222b !important;
+    --accent: #f5b041 !important;
+
+    --header-bg: linear-gradient(135deg, #d4a663 0%, #b58847 100%) !important;
+    --header-color: #14161a !important;
+    --header-link-color: #14161a !important;
+
+    --breadcrumbs-bg: #16181e !important;
+    --breadcrumbs-fg: #9ca3af !important;
+    --breadcrumbs-link-fg: #f5b041 !important;
+
+    --body-bg: #0f1115 !important;
+    --body-fg: #f3f4f6 !important;
+    --darkened-bg: #16181e !important;
+    --hairline-color: #262a34 !important;
+    --border-color: #2d323e !important;
+
+    --link-fg: #f5b041 !important;
+    --link-hover-color: #ffd180 !important;
+    --link-selected-fg: #f5b041 !important;
+
+    --button-bg: #262a34 !important;
+    --button-fg: #f3f4f6 !important;
+    --button-hover-bg: #323744 !important;
+
+    --default-button-bg: #f5b041 !important;
+    --default-button-fg: #14161a !important;
+    --default-button-hover-bg: #e09b2d !important;
+}
+
+/* 1. CABEÇALHO SUPERIOR */
+#header {
+    background: linear-gradient(135deg, #d4a663 0%, #b58847 100%) !important;
+    color: #14161a !important;
+    border-bottom: none !important;
+    padding: 16px 28px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35) !important;
+}
+
+#header #site-name a {
+    color: #14161a !important;
+    font-weight: 800 !important;
+    font-size: 20px !important;
+    letter-spacing: -0.3px !important;
+}
+
+#user-tools, #user-tools a {
+    color: #14161a !important;
+    font-weight: 600 !important;
+}
+
+/* 2. BREADCRUMBS (CAMINHO DA PÁGINA) */
+div.breadcrumbs {
+    background: #16181e !important;
+    border-bottom: 1px solid #262a34 !important;
+    padding: 14px 28px !important;
+    font-size: 13px !important;
+    color: #9ca3af !important;
+}
+
+/* 3. MENU LATERAL ESQUERDO (CORRIGINDO LETRAS ESCURAS + ESPAÇAMENTO) */
+#nav-sidebar {
+    background-color: #13151a !important;
+    border-right: 1px solid #262a34 !important;
+    padding: 16px 12px !important;
+}
+
+#nav-filter {
+    background-color: #0f1115 !important;
+    border: 1px solid #2d323e !important;
+    border-radius: 10px !important;
+    color: #f3f4f6 !important;
+    padding: 10px 14px !important;
+    margin-bottom: 18px !important;
+}
+
+#nav-sidebar .module {
+    background-color: #181b22 !important;
+    border: 1px solid #262a34 !important;
+    border-radius: 12px !important;
+    margin-bottom: 20px !important;
+    overflow: hidden !important;
+}
+
+/* Título das seções laterais (antes estava preto ilegível) */
+#nav-sidebar .module caption,
+#nav-sidebar .module th,
+#nav-sidebar .module caption a.section {
+    background: #1f232d !important;
+    color: #d4a663 !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    padding: 12px 16px !important;
+    border-bottom: 1px solid #262a34 !important;
+}
+
+#nav-sidebar tr {
+    border-bottom: 1px solid #222630 !important;
+}
+
+#nav-sidebar tr th {
+    background: transparent !important;
+    padding: 12px 16px !important;
+}
+
+#nav-sidebar tr th a {
+    color: #f3f4f6 !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+}
+
+#nav-sidebar tr.current-model {
+    background: rgba(212, 166, 99, 0.14) !important;
+    border-left: 3px solid #d4a663 !important;
+}
+
+#nav-sidebar tr.current-model th a {
+    color: #f5b041 !important;
+}
+
+/* Botão "+ Add" verde esmeralda igual ao indicador de Disponíveis do Dashboard */
+#nav-sidebar a.addlink {
+    background: rgba(34, 197, 94, 0.14) !important;
+    color: #4ade80 !important;
+    border: 1px solid rgba(34, 197, 94, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 4px 10px !important;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    margin-right: 10px !important;
+}
+
+#nav-sidebar a.addlink:hover {
+    background: rgba(34, 197, 94, 0.25) !important;
+}
+
+/* 4. ÁREA PRINCIPAL E TÍTULO DA PÁGINA */
+#content {
+    padding: 28px 32px !important;
+}
+
+#content h1 {
+    color: #f9fafb !important;
+    font-size: 24px !important;
+    font-weight: 700 !important;
+    margin-bottom: 24px !important;
+}
+
+/* Botão principal "+ ADD ITEM CARDAPIO" com destaque e ícone */
+.object-tools {
+    margin-top: -48px !important;
+    margin-bottom: 24px !important;
+}
+
+.object-tools a.addlink {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    color: #052e16 !important;
+    font-weight: 800 !important;
+    border-radius: 10px !important;
+    padding: 12px 20px !important;
+    font-size: 12px !important;
+    letter-spacing: 0.5px !important;
+    box-shadow: 0 6px 16px rgba(34, 197, 94, 0.25) !important;
+    transition: all 0.2s ease !important;
+}
+
+.object-tools a.addlink:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 20px rgba(34, 197, 94, 0.35) !important;
+}
+
+/* 5. CARTÕES DE BUSCA, TABELA E FILTROS LATERAIS */
+#changelist {
+    gap: 24px !important;
+}
+
+#changelist-search {
+    background: #181b22 !important;
+    padding: 16px 20px !important;
+    border-bottom: 1px solid #262a34 !important;
+}
+
+#changelist-search input[type="text"] {
+    min-width: 280px !important;
+    padding: 10px 14px !important;
+}
+
+#changelist-search input[type="submit"] {
+    background: #262a34 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #363c4a !important;
+    border-radius: 8px !important;
+    padding: 10px 18px !important;
+    font-weight: 600 !important;
+    margin-left: 8px !important;
+    cursor: pointer !important;
+}
+
+.actions {
+    background: #16181e !important;
+    padding: 14px 20px !important;
+    border-bottom: 1px solid #262a34 !important;
+    color: #d1d5db !important;
+}
+
+/* Tabela de Produtos mais espaçada */
+#result_list thead th {
+    background: #1f232d !important;
+    color: #d4a663 !important;
+    font-size: 11px !important;
+    letter-spacing: 0.6px !important;
+    padding: 14px 16px !important;
+    border-bottom: 1px solid #2d323e !important;
+}
+
+#result_list thead th a {
+    color: #d4a663 !important;
+}
+
+#result_list tbody tr {
+    background: #181b22 !important;
+    border-bottom: 1px solid #232732 !important;
+    transition: background 0.15s ease !important;
+}
+
+#result_list tbody tr:hover {
+    background: #1f232d !important;
+}
+
+#result_list tbody td,
+#result_list tbody th {
+    padding: 16px !important;
+    vertical-align: middle !important;
+    color: #e5e7eb !important;
+    font-size: 14px !important;
+}
+
+#result_list tbody th a {
+    color: #f5b041 !important;
+    font-weight: 700 !important;
+}
+
+/* Painel de Filtro à Direita */
+#changelist-filter {
+    background-color: #181b22 !important;
+    border: 1px solid #262a34 !important;
+    border-radius: 14px !important;
+    padding-bottom: 12px !important;
+    min-width: 240px !important;
+}
+
+#changelist-filter h2 {
+    background: #1f232d !important;
+    color: #d4a663 !important;
+    font-weight: 700 !important;
+    padding: 14px 18px !important;
+    border-bottom: 1px solid #262a34 !important;
+}
+
+#changelist-filter h3 {
+    color: #9ca3af !important;
+    font-size: 12px !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 14px 18px 6px 18px !important;
+}
+
+#changelist-filter ul {
+    padding: 0 14px 10px 14px !important;
+}
+
+#changelist-filter li {
+    margin-bottom: 4px !important;
+}
+
+#changelist-filter li a {
+    display: block !important;
+    padding: 6px 10px !important;
+    border-radius: 6px !important;
+    color: #d1d5db !important;
+    font-size: 13px !important;
+}
+
+#changelist-filter li.selected a {
+    background: rgba(212, 166, 99, 0.16) !important;
+    color: #f5b041 !important;
+    font-weight: 700 !important;
+}
+
+/* 6. FORMULÁRIO DE ADICIONAR / EDITAR PRODUTO */
+.module,
+fieldset.module,
+.inline-group {
+    background-color: #181b22 !important;
+    border: 1px solid #262a34 !important;
+    border-radius: 14px !important;
+    overflow: hidden !important;
+    margin-bottom: 24px !important;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+}
+
+fieldset.module h2 {
+    background: #1f232d !important;
+    color: #d4a663 !important;
+    font-weight: 700 !important;
+    font-size: 14px !important;
+    padding: 16px 22px !important;
+    border-bottom: 1px solid #262a34 !important;
+}
+
+fieldset.module .description {
+    background: rgba(59, 130, 246, 0.08) !important;
+    color: #93c5fd !important;
+    border-bottom: 1px solid #262a34 !important;
+    padding: 12px 22px !important;
+    font-size: 13px !important;
+}
+
+.form-row {
+    padding: 20px 22px !important;
+    border-bottom: 1px solid #222630 !important;
+}
+
+.form-row label {
+    color: #f3f4f6 !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    margin-bottom: 8px !important;
+}
+
+.help, p.help {
+    color: #9ca3af !important;
+    font-size: 12px !important;
+    margin-top: 6px !important;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="url"],
+input[type="email"],
+textarea,
+select {
+    background-color: #0f1115 !important;
+    border: 1px solid #2d323e !important;
+    border-radius: 10px !important;
+    color: #f3f4f6 !important;
+    padding: 11px 14px !important;
+    font-size: 14px !important;
+    transition: all 0.2s ease !important;
+}
+
+input:focus, textarea:focus, select:focus {
+    border-color: #d4a663 !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(212, 166, 99, 0.18) !important;
+}
+
+/* Barra de Botões de Salvar */
+.submit-row {
+    background: #181b22 !important;
+    border: 1px solid #262a34 !important;
+    border-radius: 14px !important;
+    padding: 18px 22px !important;
+    display: flex !important;
+    gap: 12px !important;
+    align-items: center !important;
+}
+
+.submit-row input.default {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%) !important;
+    color: #052e16 !important;
+    font-weight: 800 !important;
+    border-radius: 10px !important;
+    padding: 12px 24px !important;
+    border: none !important;
+    cursor: pointer !important;
+    font-size: 13px !important;
+}
+
+.submit-row input[type="submit"]:not(.default) {
+    background: #262a34 !important;
+    color: #f3f4f6 !important;
+    border: 1px solid #363c4a !important;
+    border-radius: 10px !important;
+    padding: 12px 18px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+}
+
+.submit-row a.deletelink {
+    background: rgba(249, 115, 22, 0.15) !important;
+    color: #fb923c !important;
+    border: 1px solid rgba(249, 115, 22, 0.3) !important;
+    border-radius: 10px !important;
+    padding: 12px 18px !important;
+    font-weight: 700 !important;
+}
