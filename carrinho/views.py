@@ -1,6 +1,4 @@
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.views.decorators.http import require_POST
 from uuid import uuid4
 
 from django.shortcuts import render, redirect, get_object_or_404

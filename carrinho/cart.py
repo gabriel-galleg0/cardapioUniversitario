@@ -31,7 +31,8 @@ class Carrinho:
 
     def limpar(self):
         self.session['carrinho'] = {}
-        self.session.modified = True
+        self.carrinho = self.session['carrinho']
+        self.salvar()
 
     def __iter__(self):
         item_ids = self.carrinho.keys()
