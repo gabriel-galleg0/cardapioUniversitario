@@ -70,6 +70,8 @@ SECURE_SSL_REDIRECT = not DEBUG
 # Application definition
 
 INSTALLED_APPS = [
+    'menu',
+    'carrinho',
     "cardapio.apps.AmaralAdminConfig",
 
     'django.contrib.auth',
@@ -77,9 +79,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    'menu',
-    'carrinho',
 ]
 
 MIDDLEWARE = [
@@ -136,7 +135,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'pt-br'
 
 TIME_ZONE = 'UTC'
 
