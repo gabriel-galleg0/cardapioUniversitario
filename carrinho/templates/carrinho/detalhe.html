@@ -69,8 +69,8 @@
                         {% if item.item.imagem %}
 
                             <img
-                                src="{{ item.item.imagem.url }}"
-                                alt=""
+                                src="{{ item.item.imagem_segura_url }}"
+                                alt="{{ item.item.nome }}"
                                 loading="lazy"
                                 width="92"
                                 height="92"
